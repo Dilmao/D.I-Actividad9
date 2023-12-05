@@ -1,10 +1,12 @@
-import { useState } from 'react';
-
+import React, { useContext, useState } from 'react';
+import ContextoTienda from '../AppContext';
 import Cart from '../Cart/Cart';
 import classes from './MainHeader.module.css';
 
-function MainHeader({ cartItems }) {
-  const [modalIsOpen, setModalIsOpen] = useState();
+function MainHeader() {
+  const headerContext = useContext(ContextoTienda);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const numCartItems = headerContext.cartItem.length;
 
   function openCartModalHandler() {
     setModalIsOpen(true);
@@ -14,7 +16,10 @@ function MainHeader({ cartItems }) {
     setModalIsOpen(false);
   }
 
-  const numCartItems = cartItems.length;
+  const infoHeader = {
+    onCloseCart: closeCartModalHandler,
+    items: headerContext
+  }
 
   return (
     <>
@@ -22,7 +27,11 @@ function MainHeader({ cartItems }) {
         <h1>StateEvents Shop</h1>
         <button onClick={openCartModalHandler}>Cart ({numCartItems})</button>
       </header>
-      {modalIsOpen && <Cart onClose={closeCartModalHandler} items={cartItems} />}
+      {modalIsOpen &&
+      <ContextoTienda.Provider value={infoHeader}>
+        <Cart/>
+      </ContextoTienda.Provider>
+      }
     </>
   );
 }

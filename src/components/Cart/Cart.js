@@ -1,13 +1,16 @@
 import ReactDOM from 'react-dom';
 
 import classes from './Cart.module.css';
+import { useContext } from 'react';
+import ContextoTienda from '../AppContext';
 
-function Cart({ onClose, items }) {
-  const total = items.reduce((prevVal, item) => prevVal + item.price, 0)
+function Cart() {
+  const CartContext = useContext(ContextoTienda)
+  const total = CartContext.items.reduce((prevVal, item) => prevVal + item.price, 0)
 
   return ReactDOM.createPortal(
     <>
-      <div className={classes.backdrop} onClick={onClose} />
+      <div className={classes.backdrop} onClick={CartContext.onCloseCart} />
       <aside className={classes.cart}>
         <h2>Your Cart</h2>
         <ul>
@@ -19,8 +22,8 @@ function Cart({ onClose, items }) {
         </ul>
         <p className={classes.total}>Total: ${total}</p>
         <div className={classes.actions}>
-          <button onClick={onClose}>Close</button>
-          <button onClick={onClose}>Buy</button>
+          <button onClick={CartContext.onCloseCart}>Close</button>
+          <button onClick={CartContext.onCloseCart}>Buy</button>
         </div>
       </aside>
     </>,

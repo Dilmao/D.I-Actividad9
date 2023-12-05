@@ -2,11 +2,10 @@ import { useState } from 'react';
 
 import Events from './components/Events/Events';
 import MainHeader from './components/MainHeader/MainHeader';
-import contextoTienda from './components/Context';
+import ContextoTienda from './components/AppContext';
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
-  const info = {cartItems: cartItems, onAddItem: addItemHandler, onRemoveItem: removeItemHandler}
 
   function addItemHandler(item) {
     setCartItems((prevItems) => [...prevItems, item]);
@@ -16,15 +15,19 @@ function App() {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
   }
 
+  const info = {
+    cartItem: cartItems,
+    addItem: addItemHandler,
+    removeItem: removeItemHandler
+  }
+
   return (
-    <>
-      <contextoTienda.Provider value={info}>
-        <MainHeader/>
-        <main>
-          <Events/>
-        </main>
-      </contextoTienda.Provider>
-    </>
+    <ContextoTienda.Provider value={info}>
+      <MainHeader/>
+      <main>
+        <Events/>
+      </main>
+    </ContextoTienda.Provider>
   );
 }
 
